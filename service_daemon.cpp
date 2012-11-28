@@ -31,7 +31,7 @@ static int accept_server(const char *socket_path,int socket_backlog) {
 	return 0;
 }
 int main(int argc,char **argv) {
-	if(argc != 3) {
+	if(argc != 2) {
 		return 2;
 	}
 	
