@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <sys/socket.h>
 #include "diy.h"
 #include "procmounter.h"
 
@@ -15,18 +16,24 @@ char *fdpath(int fd) {
 	return path;
 }
 
-int procmount_diy(int dir,int type,pid_t pid) {
+int procmount_diy(int dir,int type,ucred creds) {
 	char *dirpath = fdpath(dir);
 	int ret;
 	switch (type) {
 		case MOUNT_PROC:
 			char *flags;
-			asprintf(&flags,"nsofpid=%d",pid);
+			asprintf(&flags,"nsofpid=%d",creds.pid);
 			ret = mount("proc",dirpath,"proc",0,flags);
 			free(flags);
 			break;
 		case MOUNT_PTS:
-			ret = mount("pts",dirpath,"devpts",0,"newinstance");
+			/*
+			char *flags;
+			asprintf(&flags,"newinstance,uid=%d,gid=%d",creds.uid,creds.gid);
+			ret = mount("pts",dirpath,"devpts",0,flags);
+			free(flags);
+			*/
+			ret = mount("pts",dirpath,"devpts",0,"newinstance,mode=666");
 			break;
 		case MOUNT_UMOUNT:
 			ret = umount2(dirpath,MNT_DETACH);

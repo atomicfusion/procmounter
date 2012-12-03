@@ -22,7 +22,7 @@ int procmounter_service_ipc_server(int socket) {
 		err = errno;
 	}
 	
-	int ret = procmount_diy(dir,type,creds.pid);
+	int ret = procmount_diy(dir,type,creds);
 	if(ret) {
 		err = errno;
 	}
