@@ -33,7 +33,7 @@ int procmount_diy(int dir,int type,ucred creds) {
 			ret = mount("pts",dirpath,"devpts",0,flags);
 			free(flags);
 			*/
-			ret = mount("pts",dirpath,"devpts",0,"newinstance,mode=666");
+			ret = mount("pts",dirpath,"devpts",0,"newinstance,ptmxmode=666");
 			break;
 		case MOUNT_UMOUNT:
 			ret = umount2(dirpath,MNT_DETACH);
