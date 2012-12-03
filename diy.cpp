@@ -28,6 +28,9 @@ int procmount_diy(int dir,int type,pid_t pid) {
 		case MOUNT_PTS:
 			ret = mount("pts",dirpath,"devpts",0,"newinstance");
 			break;
+		case MOUNT_UMOUNT:
+			ret = umount2(dirpath,MNT_DETACH);
+			break;
 		default:
 			errno = EINVAL;
 			ret = -1;

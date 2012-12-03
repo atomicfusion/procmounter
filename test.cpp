@@ -16,6 +16,8 @@ int main(int argc,char **argv) {
 		type = MOUNT_PROC;
 	} else if (!strcmp(argv[1],"pts")) {
 		type = MOUNT_PTS;
+	} else if (!strcmp(argv[1],"umount")) {
+		type = MOUNT_UMOUNT;
 	} else {
 		fprintf(stderr,"error: %s is not \"proc\" or \"pts\".\n",argv[1]);
 		return 1;
