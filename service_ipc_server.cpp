@@ -8,6 +8,7 @@
 
 int procmounter_service_ipc_server(int socket) {
 	int dir;
+	int type;
 	int err = 0;
 	ucred creds;
 	
@@ -17,8 +18,11 @@ int procmounter_service_ipc_server(int socket) {
 	if (dir < 0 && !err) {
 		err = errno;
 	}
+	if(read(socket,&type,sizeof(type)) != sizeof(type) && !err) {
+		err = errno;
+	}
 	
-	int ret = procmount_diy(dir,creds.pid);
+	int ret = procmount_diy(dir,type,creds.pid);
 	if(ret) {
 		err = errno;
 	}

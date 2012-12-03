@@ -7,7 +7,7 @@
 //FIXME: Fixup error codes. For example: it doesn't make much sense to the user if it returns "No such file or directory." when the socket (that the user doesn't know about) doesn't exist.
 //FIXME: Workout the heirarchy for determining socket path.
 
-int procmount(int dir) {
+int procmount(int dir,int type) {
 	const char *socket_path;
 	int socket;
 	
@@ -23,5 +23,5 @@ int procmount(int dir) {
 		return -1;
 	}
 	
-	return procmounter_service_ipc_client(dir,socket);
+	return procmounter_service_ipc_client(dir,type,socket);
 }

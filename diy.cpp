@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "diy.h"
+#include "procmounter.h"
 
 char *fdpath(int fd) {
 	char *path;
@@ -14,12 +15,23 @@ char *fdpath(int fd) {
 	return path;
 }
 
-int procmount_diy(int dir,pid_t pid) {
+int procmount_diy(int dir,int type,pid_t pid) {
 	char *dirpath = fdpath(dir);
-	char *flags;
-	asprintf(&flags,"nsofpid=%d",pid);
-	int ret = mount("proc",dirpath,"proc",0,flags);
+	int ret;
+	switch (type) {
+		case MOUNT_PROC:
+			char *flags;
+			asprintf(&flags,"nsofpid=%d",pid);
+			ret = mount("proc",dirpath,"proc",0,flags);
+			free(flags);
+			break;
+		case MOUNT_PTS:
+			ret = mount("pts",dirpath,"devpts",0,"newinstance");
+			break;
+		default:
+			errno = EINVAL;
+			ret = -1;
+	}
 	free(dirpath);
-	free(flags);
 	return ret;
 }
